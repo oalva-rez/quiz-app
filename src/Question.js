@@ -25,7 +25,7 @@ export default function Question(props) {
     return answersObj;
   }
 
-  function selectChoice(id) {
+  function selectChoiceProperty(id) {
     setAllChoices((prev) => {
       //unselect all before selecting user choice to avoid double selection
       const newArray = prev.map((obj) => {
@@ -45,8 +45,6 @@ export default function Question(props) {
         return { backgroundColor: "red" };
       } else if (choice.isSelected) {
         return { backgroundColor: "black" };
-      } else {
-        return { backgroundColor: "lightgrey" };
       }
     }
     function selectChoiceStyling() {
@@ -61,7 +59,7 @@ export default function Question(props) {
           props.checkAnswers ? getCheckedAnswersStyle() : selectChoiceStyling()
         }
         onClick={() => {
-          selectChoice(choice.id);
+          selectChoiceProperty(choice.id);
         }}
         key={choice.id}
       >

@@ -4,8 +4,9 @@ import { nanoid } from "nanoid";
 
 export default function Quiz(props) {
   const [allQuestions, setAllQuestions] = useState([]);
-  const [playAgain, setPlayAgain] = useState(false);
   const [checkAnswers, setCheckAnswers] = useState(false);
+  const [playAgain, setPlayAgain] = useState(false);
+
   console.log(checkAnswers);
   useEffect(() => {
     fetch(
@@ -29,20 +30,34 @@ export default function Quiz(props) {
           return newArray;
         });
       });
-  }, []);
+  }, [playAgain]);
+
+  function toggleCheckAnswers() {
+    setCheckAnswers((prev) => !prev);
+  }
+  function togglePlayAgin() {
+    setPlayAgain((prev) => !prev);
+    setCheckAnswers((prev) => !prev);
+  }
 
   const questionElements = allQuestions.map((obj) => (
     <Question obj={obj} key={obj.id} checkAnswers={checkAnswers} />
   ));
-  function toggleCheckAnswers() {
-    setCheckAnswers((prev) => !prev);
-  }
+
   return (
     <div className="quiz--container">
       <div className="quiz--questions">{questionElements}</div>
-      <button className="quiz--button" onClick={toggleCheckAnswers}>
-        {!checkAnswers ? "Check Answers" : "Play Again"}
-      </button>
+
+      {!checkAnswers && (
+        <button className="quiz--button" onClick={toggleCheckAnswers}>
+          Check Answers
+        </button>
+      )}
+      {checkAnswers && (
+        <button className="quiz--button" onClick={togglePlayAgin}>
+          Play Again
+        </button>
+      )}
     </div>
   );
 }
