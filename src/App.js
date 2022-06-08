@@ -3,7 +3,7 @@ import IntroPage from "./IntroPage";
 import Quiz from "./Quiz";
 
 function App() {
-  const [quizStarted, setQuizStarted] = useState(true);
+  const [quizStarted, setQuizStarted] = useState(false);
   function startQuiz() {
     setQuizStarted((prev) => !prev);
   }

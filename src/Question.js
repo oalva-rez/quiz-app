@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { nanoid } from "nanoid";
 
 export default function Question(props) {
   const { question, id, correctAnswer, wrongAnswers } = props.obj;
   const [allChoices, setAllChoices] = useState(generateChoices());
+  const [first, setFirst] = useState([]);
 
   // combine correct answer with with wrong answers within an array
   function generateChoices() {
@@ -36,7 +37,20 @@ export default function Question(props) {
       });
     });
   }
+  useEffect(() => {
+    if (props.checkAnswers) {
+      for (let ques of allChoices) {
+        if (ques.isCorrect && ques.isSelected) {
+          props.countCorrect(1);
+        }
+      }
+    }
+    return () => {
+      props.countCorrect(0, true);
+    };
+  }, [props.checkAnswers]);
 
+  // render choices
   let choices = allChoices.map((choice) => {
     function getCheckedAnswersStyle() {
       if (choice.isSelected && choice.isCorrect) {

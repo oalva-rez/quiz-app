@@ -6,8 +6,8 @@ export default function Quiz(props) {
   const [allQuestions, setAllQuestions] = useState([]);
   const [checkAnswers, setCheckAnswers] = useState(false);
   const [playAgain, setPlayAgain] = useState(false);
+  const [correctAnswers, setCorrectAnswers] = useState(0);
 
-  console.log(checkAnswers);
   useEffect(() => {
     fetch(
       "https://opentdb.com/api.php?amount=5&difficulty=easy&type=multiple",
@@ -31,6 +31,12 @@ export default function Quiz(props) {
         });
       });
   }, [playAgain]);
+  function countCorrect(num, reset = false) {
+    setCorrectAnswers((prev) => prev + num);
+    if (reset) {
+      setCorrectAnswers(0);
+    }
+  }
 
   function toggleCheckAnswers() {
     setCheckAnswers((prev) => !prev);
@@ -41,13 +47,18 @@ export default function Quiz(props) {
   }
 
   const questionElements = allQuestions.map((obj) => (
-    <Question obj={obj} key={obj.id} checkAnswers={checkAnswers} />
+    <Question
+      obj={obj}
+      key={obj.id}
+      checkAnswers={checkAnswers}
+      countCorrect={countCorrect}
+    />
   ));
 
   return (
     <div className="quiz--container">
       <div className="quiz--questions">{questionElements}</div>
-
+      {checkAnswers && <h2>You scored {correctAnswers}/5 correct answers</h2>}
       {!checkAnswers && (
         <button className="quiz--button" onClick={toggleCheckAnswers}>
           Check Answers
