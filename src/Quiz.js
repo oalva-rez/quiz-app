@@ -5,7 +5,8 @@ import { nanoid } from "nanoid";
 export default function Quiz(props) {
   const [allQuestions, setAllQuestions] = useState([]);
   const [playAgain, setPlayAgain] = useState(false);
-
+  const [checkAnswers, setCheckAnswers] = useState(false);
+  console.log(checkAnswers);
   useEffect(() => {
     fetch(
       "https://opentdb.com/api.php?amount=5&difficulty=easy&type=multiple",
@@ -28,17 +29,19 @@ export default function Quiz(props) {
           return newArray;
         });
       });
-  }, [playAgain]);
+  }, []);
 
   const questionElements = allQuestions.map((obj) => (
-    <Question obj={obj} key={obj.id} />
+    <Question obj={obj} key={obj.id} checkAnswers={checkAnswers} />
   ));
-
+  function toggleCheckAnswers() {
+    setCheckAnswers((prev) => !prev);
+  }
   return (
     <div className="quiz--container">
       <div className="quiz--questions">{questionElements}</div>
-      <button className="quiz--button">
-        {!playAgain ? "Check Answers" : "Play Again"}
+      <button className="quiz--button" onClick={toggleCheckAnswers}>
+        {!checkAnswers ? "Check Answers" : "Play Again"}
       </button>
     </div>
   );

@@ -5,6 +5,7 @@ export default function Question(props) {
   const { question, id, correctAnswer, wrongAnswers } = props.obj;
   const [allChoices, setAllChoices] = useState(generateChoices());
 
+  // combine correct answer with with wrong answers within an array
   function generateChoices() {
     let answersObj = wrongAnswers.map((wrongAnswer) => {
       return {
@@ -23,6 +24,7 @@ export default function Question(props) {
     });
     return answersObj;
   }
+
   function selectChoice(id) {
     setAllChoices((prev) => {
       //unselect all before selecting user choice to avoid double selection
@@ -36,9 +38,28 @@ export default function Question(props) {
   }
 
   let choices = allChoices.map((choice) => {
+    function getCheckedAnswersStyle() {
+      if (choice.isSelected && choice.isCorrect) {
+        return { backgroundColor: "lightgreen" };
+      } else if (!choice.isSelected && choice.isCorrect) {
+        return { backgroundColor: "red" };
+      } else if (choice.isSelected) {
+        return { backgroundColor: "black" };
+      } else {
+        return { backgroundColor: "lightgrey" };
+      }
+    }
+    function selectChoiceStyling() {
+      if (choice.isSelected) {
+        return { backgroundColor: "blue" };
+      }
+    }
     return (
       <li
         className="choice"
+        style={
+          props.checkAnswers ? getCheckedAnswersStyle() : selectChoiceStyling()
+        }
         onClick={() => {
           selectChoice(choice.id);
         }}
