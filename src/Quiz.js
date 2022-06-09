@@ -2,11 +2,17 @@ import React, { useState, useEffect } from "react";
 import Question from "./Question";
 import { nanoid } from "nanoid";
 
-export default function Quiz(props) {
+export default function Quiz() {
   const [allQuestions, setAllQuestions] = useState([]);
   const [checkAnswers, setCheckAnswers] = useState(false);
   const [playAgain, setPlayAgain] = useState(false);
   const [correctAnswers, setCorrectAnswers] = useState(0);
+
+  function decodeEntity(inputStr) {
+    let textarea = document.createElement("textarea");
+    textarea.innerHTML = inputStr;
+    return textarea.value;
+  }
 
   useEffect(() => {
     fetch(
@@ -17,13 +23,20 @@ export default function Quiz(props) {
     )
       .then((res) => res.json())
       .then((data) => {
+        // set array of all question objects on refresh and on play again
         setAllQuestions(() => {
           let newArray = [];
+          let ques, corr, incorr;
           for (let obj of data.results) {
+            // decode html entities from API
+            ques = decodeEntity(obj.question);
+            corr = decodeEntity(obj.correct_answer);
+            incorr = decodeEntity(obj.incorrect_answers).split(",");
+
             newArray.push({
-              question: obj.question,
-              correctAnswer: obj.correct_answer,
-              wrongAnswers: obj.incorrect_answers,
+              question: ques,
+              correctAnswer: corr,
+              wrongAnswers: incorr,
               id: nanoid(),
             });
           }
@@ -57,8 +70,12 @@ export default function Quiz(props) {
 
   return (
     <div className="quiz--container">
-      <div className="quiz--questions">{questionElements}</div>
-      {checkAnswers && <h2>You scored {correctAnswers}/5 correct answers</h2>}
+      <div className="quiz--all-questions">{questionElements}</div>
+      {checkAnswers && (
+        <h2 className="quiz--result">
+          You scored {correctAnswers}/5 correct answers
+        </h2>
+      )}
       {!checkAnswers && (
         <button className="quiz--button" onClick={toggleCheckAnswers}>
           Check Answers

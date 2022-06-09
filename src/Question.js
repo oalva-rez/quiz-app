@@ -54,26 +54,32 @@ export default function Question(props) {
   let choices = allChoices.map((choice) => {
     function getCheckedAnswersStyle() {
       if (choice.isSelected && choice.isCorrect) {
-        return { backgroundColor: "lightgreen" };
+        return { backgroundColor: "#94D7A2", border: "none" };
       } else if (!choice.isSelected && choice.isCorrect) {
-        return { backgroundColor: "red" };
+        return { backgroundColor: "#F8BCBC", opacity: "0.5", border: "none" };
       } else if (choice.isSelected) {
-        return { backgroundColor: "black" };
+        return { backgroundColor: "#94D7A2", border: "none" };
       }
     }
+    console.log(props.checkAnswers);
     function selectChoiceStyling() {
       if (choice.isSelected) {
-        return { backgroundColor: "blue" };
+        return {
+          backgroundColor: "#D6DBF5",
+          border: "none",
+        };
       }
     }
     return (
       <li
-        className="choice"
+        className="quiz--choice"
         style={
           props.checkAnswers ? getCheckedAnswersStyle() : selectChoiceStyling()
         }
         onClick={() => {
-          selectChoiceProperty(choice.id);
+          if (!props.checkAnswers) {
+            selectChoiceProperty(choice.id);
+          }
         }}
         key={choice.id}
       >
@@ -85,7 +91,7 @@ export default function Question(props) {
   return (
     <div className="quiz--question">
       <h2>{question}</h2>
-      <ul className="choices">{choices}</ul>
+      <ul className="quiz--all-choices">{choices}</ul>
     </div>
   );
 }
