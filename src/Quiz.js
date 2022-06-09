@@ -26,13 +26,16 @@ export default function Quiz() {
         // set array of all question objects on refresh and on play again
         setAllQuestions(() => {
           let newArray = [];
-          let ques, corr, incorr;
+
           for (let obj of data.results) {
+            let ques, corr;
+            let incorr = [];
             // decode html entities from API
             ques = decodeEntity(obj.question);
             corr = decodeEntity(obj.correct_answer);
-            incorr = decodeEntity(obj.incorrect_answers).split(",");
-
+            obj.incorrect_answers.forEach((x) => {
+              incorr.push(decodeEntity(x));
+            });
             newArray.push({
               question: ques,
               correctAnswer: corr,
@@ -44,6 +47,8 @@ export default function Quiz() {
         });
       });
   }, [playAgain]);
+
+  // set number of correct or reset if play again
   function countCorrect(num, reset = false) {
     setCorrectAnswers((prev) => prev + num);
     if (reset) {
