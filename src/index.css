@@ -10,12 +10,12 @@ body {
   background-color: #f5f7fb;
 }
 .blue-blob {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   z-index: -9999;
 }
 .yellow-blob {
-  position: absolute;
+  position: fixed;
   right: 0;
   z-index: -9999;
 }
@@ -78,6 +78,9 @@ body {
   padding-bottom: 20px;
   border-bottom: 0.794239px solid #dbdef0;
 }
+.quiz--all-choices > * {
+  flex: 1;
+}
 .quiz--choice {
   background-color: #f5f7fb;
   padding: 3px 18px;
@@ -106,4 +109,17 @@ body {
   font-size: 12px;
   font-weight: 600;
   font-family: "Inter", sans-serif;
+}
+
+@media (max-width: 540px) {
+  .quiz--all-choices {
+    display: flex;
+    flex-direction: column;
+  }
+  .quiz--choice {
+    padding: 6px 0px;
+  }
+  .quiz--container {
+    margin: 4vh 4vw;
+  }
 }

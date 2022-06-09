@@ -61,7 +61,6 @@ export default function Question(props) {
         return { backgroundColor: "#94D7A2", border: "none" };
       }
     }
-    console.log(props.checkAnswers);
     function selectChoiceStyling() {
       if (choice.isSelected) {
         return {
